@@ -1,12 +1,17 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import ThemeToggler from "./ThemeToggler";
 import menuData from "./menuData";
+import { useAuth } from "@/contexts/AuthContext";
 
 const Header = () => {
+  const router = useRouter();
+  const { user, loading: authLoading, signOut } = useAuth();
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
+
   // Navbar toggle
   const [navbarOpen, setNavbarOpen] = useState(false);
   const navbarToggleHandler = () => {
@@ -26,6 +31,21 @@ const Header = () => {
     window.addEventListener("scroll", handleStickyNavbar);
   });
 
+  // Close user menu when clicking outside
+  useEffect(() => {
+    if (!userMenuOpen) return;
+    
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as Element;
+      if (!target.closest('[data-user-menu]')) {
+        setUserMenuOpen(false);
+      }
+    };
+    
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [userMenuOpen]);
+
   // submenu handler
   const [openIndex, setOpenIndex] = useState(-1);
   const handleSubmenu = (index) => {
@@ -34,6 +54,12 @@ const Header = () => {
     } else {
       setOpenIndex(index);
     }
+  };
+
+  const handleSignOut = async () => {
+    await signOut();
+    router.push("/");
+    setUserMenuOpen(false);
   };
 
   const usePathName = usePathname();
@@ -158,19 +184,72 @@ const Header = () => {
                   </ul>
                 </nav>
               </div>
-              <div className="flex items-center justify-end pr-16 lg:pr-0">
-                <Link
-                  href="/signin"
-                  className="text-dark hidden px-7 py-3 text-base font-medium hover:opacity-70 md:block dark:text-white"
-                >
-                  Sign In
-                </Link>
-                <Link
-                  href="/signup"
-                  className="ease-in-up shadow-btn hover:shadow-btn-hover bg-primary hover:bg-primary/90 hidden rounded-xs px-8 py-3 text-base font-medium text-white transition duration-300 md:block md:px-9 lg:px-6 xl:px-9"
-                >
-                  Sign Up
-                </Link>
+              <div className="flex items-center justify-end gap-4 pr-16 lg:pr-0">
+                {!authLoading && (
+                  <>
+                    {user ? (
+                      <div className="relative" data-user-menu>
+                        <button
+                          onClick={() => setUserMenuOpen(!userMenuOpen)}
+                          className="text-dark hidden items-center gap-2 px-4 py-2 text-base font-medium hover:opacity-70 md:flex dark:text-white"
+                        >
+                          <span className="hidden lg:inline">
+                            {user?.user_metadata?.name || user?.email?.split("@")[0] || "User"}
+                          </span>
+                          <svg
+                            width="20"
+                            height="20"
+                            viewBox="0 0 20 20"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M10 10C12.7614 10 15 7.76142 15 5C15 2.23858 12.7614 0 10 0C7.23858 0 5 2.23858 5 5C5 7.76142 7.23858 10 10 10Z"
+                              fill="currentColor"
+                            />
+                            <path
+                              d="M10 12C5.58172 12 2 13.7909 2 16V20H18V16C18 13.7909 14.4183 12 10 12Z"
+                              fill="currentColor"
+                            />
+                          </svg>
+                        </button>
+                        {userMenuOpen && (
+                          <div className="dark:bg-dark absolute right-0 top-full mt-2 w-48 rounded-sm bg-white shadow-lg">
+                            <div className="border-body-color/50 border-b px-4 py-3 dark:border-white/10">
+                              <p className="text-dark text-sm font-medium dark:text-white">
+                                {user?.user_metadata?.name || "User"}
+                              </p>
+                              <p className="text-body-color text-xs dark:text-white/70">
+                                {user?.email || ""}
+                              </p>
+                            </div>
+                            <button
+                              onClick={handleSignOut}
+                              className="text-dark hover:bg-primary/5 hover:text-primary w-full px-4 py-2 text-left text-sm transition-colors dark:text-white/70 dark:hover:text-white"
+                            >
+                              Sign Out
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    ) : (
+                      <>
+                        <Link
+                          href="/signin"
+                          className="text-dark hidden px-7 py-3 text-base font-medium hover:opacity-70 md:block dark:text-white"
+                        >
+                          Sign In
+                        </Link>
+                        <Link
+                          href="/signup"
+                          className="ease-in-up shadow-btn hover:shadow-btn-hover bg-primary hover:bg-primary/90 hidden rounded-xs px-8 py-3 text-base font-medium text-white transition duration-300 md:block md:px-9 lg:px-6 xl:px-9"
+                        >
+                          Sign Up
+                        </Link>
+                      </>
+                    )}
+                  </>
+                )}
                 <div>
                   <ThemeToggler />
                 </div>
