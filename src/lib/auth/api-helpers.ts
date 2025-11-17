@@ -20,13 +20,13 @@ export async function signUp(email: string, password: string, name?: string) {
   return { data, error: null };
 }
 
-export async function signIn(email: string, password: string) {
+export async function signIn(email: string, password: string, rememberMe: boolean = false) {
   const response = await fetch(`${API_BASE}/signin`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ email, password }),
+    body: JSON.stringify({ email, password, rememberMe }),
     credentials: "include",
   });
 
