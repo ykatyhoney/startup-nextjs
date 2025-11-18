@@ -185,6 +185,12 @@ const Header = () => {
                 </nav>
               </div>
               <div className="flex items-center justify-end gap-4 pr-16 lg:pr-0">
+                <Link
+                  href="#contact"
+                  className="ease-in-up shadow-btn hover:shadow-btn-hover bg-primary hover:bg-primary/90 hidden rounded-lg px-6 py-2.5 text-base font-medium text-white transition duration-300 md:block"
+                >
+                  Book Call
+                </Link>
                 {!authLoading && (
                   <>
                     {user ? (

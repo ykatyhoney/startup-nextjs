@@ -27,8 +27,7 @@ const Footer = () => {
                   />
                 </Link>
                 <p className="mb-9 text-base leading-relaxed text-body-color dark:text-body-color-dark">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Integer lobortis.
+                  Transform your business with AI-driven solutions. We help companies reduce costs, increase efficiency, and automate workflows to stay competitive in the digital age.
                 </p>
                 <div className="flex items-center">
                   <a

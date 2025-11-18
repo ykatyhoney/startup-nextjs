@@ -5,28 +5,61 @@ import SingleTestimonial from "./SingleTestimonial";
 const testimonialData: Testimonial[] = [
   {
     id: 1,
-    name: "Musharof Chy",
-    designation: "Founder @TailGrids",
+    name: "Alex Taylor",
+    designation: "CTO",
+    company: "DeltaBridge",
     content:
-      "Our members are so impressed. It's intuitive. It's clean. It's distraction free. If you're building a community.",
+      "Polyfen's real-time threat detection boosted our security posture overnight. We've never been more confident about our data protection.",
     image: "/images/testimonials/auth-01.png",
     star: 5,
   },
   {
     id: 2,
-    name: "Devid Weilium",
-    designation: "Founder @UIdeck",
+    name: "Jeremia Simmons",
+    designation: "Co-Founder & CTO",
+    company: "Blue Forge Labs",
     content:
-      "Our members are so impressed. It's intuitive. It's clean. It's distraction free. If you're building a community.",
+      "From HR screening to scheduling automation, Polyfen's AI approach streamlined our daily operations. It's like having an extra team on board.",
     image: "/images/testimonials/auth-02.png",
     star: 5,
   },
   {
     id: 3,
-    name: "Lethium Frenci",
-    designation: "Founder @Lineicons",
+    name: "Olivia Miller",
+    designation: "CEO",
+    company: "LogicPhase",
     content:
-      "Our members are so impressed. It's intuitive. It's clean. It's distraction free. If you're building a community.",
+      "We cut compliance research time in half with their document classification and risk analysis solutions. Couldn't be happier with the results.",
+    image: "/images/testimonials/auth-03.png",
+    star: 5,
+  },
+  {
+    id: 4,
+    name: "Amelia Rivera",
+    designation: "VP of Product",
+    company: "Orionis App",
+    content:
+      "Our new AI-powered chatbots handle 70% of routine support, freeing the team to focus on higher-level tasks. Polyfen made it happen seamlessly.",
+    image: "/images/testimonials/auth-01.png",
+    star: 5,
+  },
+  {
+    id: 5,
+    name: "Javier Martinez",
+    designation: "CEO",
+    company: "Blueprint AI",
+    content:
+      "They pinpointed exactly where AI could transform our marketing and sales pipeline, driving a 30% lift in conversions. Polyfen truly delivered.",
+    image: "/images/testimonials/auth-02.png",
+    star: 5,
+  },
+  {
+    id: 6,
+    name: "Sam Spencer",
+    designation: "CEO & Co-founder",
+    company: "eFinder",
+    content:
+      "Polyfen automated our finance workflows, saving us 20 hours a week while boosting accuracy. Their AI solutions are a total game-changer.",
     image: "/images/testimonials/auth-03.png",
     star: 5,
   },
@@ -36,11 +69,11 @@ const Testimonials = () => {
   return (
     <section className="dark:bg-bg-color-dark bg-gray-light relative z-10 py-16 md:py-20 lg:py-28">
       <div className="container">
-        <SectionTitle
-          title="What Our Users Says"
-          paragraph="There are many variations of passages of Lorem Ipsum available but the majority have suffered alteration in some form."
-          center
-        />
+        <div className="mb-12 text-center">
+          <h2 className="mb-4 text-3xl font-bold text-black dark:text-white sm:text-4xl md:text-5xl">
+            Success with Every Client
+          </h2>
+        </div>
 
         <div className="grid grid-cols-1 gap-x-8 gap-y-10 md:grid-cols-2 lg:grid-cols-3">
           {testimonialData.map((testimonial) => (
