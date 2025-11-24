@@ -7,7 +7,7 @@ const starIcon = (
 );
 
 const SingleTestimonial = ({ testimonial }: { testimonial: Testimonial }) => {
-  const { star, name, image, content, designation } = testimonial;
+  const { star, name, image, content, designation, company } = testimonial;
 
   let ratingIcons = [];
   for (let index = 0; index < star; index++) {
@@ -20,20 +20,25 @@ const SingleTestimonial = ({ testimonial }: { testimonial: Testimonial }) => {
 
   return (
     <div className="w-full">
-      <div className="shadow-two hover:shadow-one dark:bg-dark dark:shadow-three dark:hover:shadow-gray-dark rounded-xs bg-white p-8 duration-300 lg:px-5 xl:px-8">
-        <div className="mb-5 flex items-center space-x-1">{ratingIcons}</div>
-        <p className="border-body-color/10 text-body-color mb-8 border-b pb-8 text-base leading-relaxed dark:border-white/10 dark:text-white">
-          “{content}
+      <div className="group rounded-lg border border-gray-200 bg-white p-8 shadow-sm transition-all hover:border-primary hover:shadow-lg dark:border-gray-700 dark:bg-gray-800 duration-300">
+        <div className="mb-6 flex gap-1">
+          {ratingIcons}
+        </div>
+        <p className="border-body-color/10 text-body-color mb-8 border-b pb-8 text-base leading-relaxed dark:border-white/10 dark:text-body-color-dark">
+          "{content}"
         </p>
         <div className="flex items-center">
-          <div className="relative mr-4 h-[50px] w-full max-w-[50px] overflow-hidden rounded-full">
-            <Image src={image} alt={name} fill />
+          <div className="relative mr-4 h-[50px] w-full max-w-[50px] overflow-hidden rounded-full ring-2 ring-gray-200 dark:ring-gray-700">
+            <Image src={image} alt={name} fill className="object-cover" />
           </div>
           <div className="w-full">
-            <h3 className="text-dark mb-1 text-lg font-semibold lg:text-base xl:text-lg dark:text-white">
+            <h3 className="text-dark mb-1 text-lg font-semibold dark:text-white">
               {name}
             </h3>
-            <p className="text-body-color text-sm">{designation}</p>
+            <p className="text-body-color text-sm dark:text-body-color-dark">
+              {designation}
+              {company && ` at ${company}`}
+            </p>
           </div>
         </div>
       </div>

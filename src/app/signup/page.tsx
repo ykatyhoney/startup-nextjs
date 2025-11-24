@@ -1,14 +1,85 @@
+"use client";
+
 import Link from "next/link";
-
-import { Metadata } from "next";
-
-export const metadata: Metadata = {
-  title: "Sign Up Page | Free Next.js Template for Startup and SaaS",
-  description: "This is Sign Up Page for Startup Nextjs Template",
-  // other metadata
-};
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { signUp, signInWithOAuth } from "@/lib/auth/auth-helpers";
+import { useAuth } from "@/contexts/AuthContext";
 
 const SignupPage = () => {
+  const router = useRouter();
+  const { refreshUser } = useAuth();
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState(false);
+  const [needsEmailConfirmation, setNeedsEmailConfirmation] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
+    setSuccess(false);
+
+    try {
+      const { data, error: signUpError } = await signUp(
+        formData.email,
+        formData.password,
+        formData.name
+      );
+
+      if (signUpError) {
+        setError(signUpError.message);
+        setLoading(false);
+        return;
+      }
+
+      if (data.user) {
+        setSuccess(true);
+        // Check if email confirmation is required
+        const needsConfirmation = data.needsEmailConfirmation;
+        setNeedsEmailConfirmation(needsConfirmation);
+        
+        if (needsConfirmation) {
+          // Email confirmation required
+          setTimeout(() => {
+            router.push("/signin");
+          }, 3000);
+        } else {
+          // User is automatically signed in - refresh auth context
+          await refreshUser();
+          setTimeout(() => {
+            router.push("/");
+          }, 2000);
+        }
+      }
+    } catch (err: any) {
+      setError(err.message || "An error occurred during signup");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleOAuthSignIn = async (provider: "google" | "github") => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      // OAuth redirects, so we can't await it
+      // Errors will be handled by the callback route
+      await signInWithOAuth(provider);
+      // Note: The page will redirect, so loading state won't be cleared
+      // This is expected behavior for OAuth flow
+    } catch (err: any) {
+      setError(err.message || "An error occurred during OAuth sign in");
+      setLoading(false);
+    }
+  };
+
   return (
     <>
       <section className="relative z-10 overflow-hidden pt-36 pb-16 md:pb-20 lg:pt-[180px] lg:pb-28">
@@ -20,9 +91,34 @@ const SignupPage = () => {
                   Create your account
                 </h3>
                 <p className="text-body-color mb-11 text-center text-base font-medium">
-                  It’s totally free and super easy
+                  It&apos;s totally free and super easy
                 </p>
-                <button className="border-stroke dark:text-body-color-dark dark:shadow-two text-body-color hover:border-primary hover:bg-primary/5 hover:text-primary dark:hover:border-primary dark:hover:bg-primary/5 dark:hover:text-primary mb-6 flex w-full items-center justify-center rounded-xs border bg-[#f8f8f8] px-6 py-3 text-base outline-hidden transition-all duration-300 dark:border-transparent dark:bg-[#2C303B] dark:hover:shadow-none">
+
+                {error && (
+                  <div className="mb-6 rounded-xs bg-red-50 p-4 text-sm text-red-600 dark:bg-red-900/20 dark:text-red-400">
+                    {error}
+                  </div>
+                )}
+
+                {success && (
+                  <div className="mb-6 rounded-xs bg-green-50 p-4 text-sm text-green-600 dark:bg-green-900/20 dark:text-green-400">
+                    {needsEmailConfirmation ? (
+                      <>
+                        Account created successfully! Please check your email ({formData.email}) to confirm your account, then sign in.
+                      </>
+                    ) : (
+                      <>
+                        Account created successfully! You&apos;re now signed in. Redirecting...
+                      </>
+                    )}
+                  </div>
+                )}
+
+                <button
+                  onClick={() => handleOAuthSignIn("google")}
+                  disabled={loading}
+                  className="border-stroke dark:text-body-color-dark dark:shadow-two text-body-color hover:border-primary hover:bg-primary/5 hover:text-primary dark:hover:border-primary dark:hover:bg-primary/5 dark:hover:text-primary mb-6 flex w-full items-center justify-center rounded-xs border bg-[#f8f8f8] px-6 py-3 text-base outline-hidden transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed dark:border-transparent dark:bg-[#2C303B] dark:hover:shadow-none"
+                >
                   <span className="mr-3">
                     <svg
                       width="20"
@@ -59,7 +155,11 @@ const SignupPage = () => {
                   Sign in with Google
                 </button>
 
-                <button className="border-stroke dark:text-body-color-dark dark:shadow-two text-body-color hover:border-primary hover:bg-primary/5 hover:text-primary dark:hover:border-primary dark:hover:bg-primary/5 dark:hover:text-primary mb-6 flex w-full items-center justify-center rounded-xs border bg-[#f8f8f8] px-6 py-3 text-base outline-hidden transition-all duration-300 dark:border-transparent dark:bg-[#2C303B] dark:hover:shadow-none">
+                <button
+                  onClick={() => handleOAuthSignIn("github")}
+                  disabled={loading}
+                  className="border-stroke dark:text-body-color-dark dark:shadow-two text-body-color hover:border-primary hover:bg-primary/5 hover:text-primary dark:hover:border-primary dark:hover:bg-primary/5 dark:hover:text-primary mb-6 flex w-full items-center justify-center rounded-xs border bg-[#f8f8f8] px-6 py-3 text-base outline-hidden transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed dark:border-transparent dark:bg-[#2C303B] dark:hover:shadow-none"
+                >
                   <span className="mr-3">
                     <svg
                       fill="currentColor"
@@ -80,19 +180,24 @@ const SignupPage = () => {
                   </p>
                   <span className="bg-body-color/50 hidden h-[1px] w-full max-w-[60px] sm:block"></span>
                 </div>
-                <form>
+                <form onSubmit={handleSubmit}>
                   <div className="mb-8">
                     <label
                       htmlFor="name"
                       className="text-dark mb-3 block text-sm dark:text-white"
                     >
-                      {" "}
-                      Full Name{" "}
+                      Full Name
                     </label>
                     <input
                       type="text"
+                      id="name"
                       name="name"
+                      value={formData.name}
+                      onChange={(e) =>
+                        setFormData({ ...formData, name: e.target.value })
+                      }
                       placeholder="Enter your full name"
+                      required
                       className="border-stroke dark:text-body-color-dark dark:shadow-two text-body-color focus:border-primary dark:focus:border-primary w-full rounded-xs border bg-[#f8f8f8] px-6 py-3 text-base outline-hidden transition-all duration-300 dark:border-transparent dark:bg-[#2C303B] dark:focus:shadow-none"
                     />
                   </div>
@@ -101,13 +206,18 @@ const SignupPage = () => {
                       htmlFor="email"
                       className="text-dark mb-3 block text-sm dark:text-white"
                     >
-                      {" "}
-                      Work Email{" "}
+                      Work Email
                     </label>
                     <input
                       type="email"
+                      id="email"
                       name="email"
+                      value={formData.email}
+                      onChange={(e) =>
+                        setFormData({ ...formData, email: e.target.value })
+                      }
                       placeholder="Enter your Email"
+                      required
                       className="border-stroke dark:text-body-color-dark dark:shadow-two text-body-color focus:border-primary dark:focus:border-primary w-full rounded-xs border bg-[#f8f8f8] px-6 py-3 text-base outline-hidden transition-all duration-300 dark:border-transparent dark:bg-[#2C303B] dark:focus:shadow-none"
                     />
                   </div>
@@ -116,13 +226,19 @@ const SignupPage = () => {
                       htmlFor="password"
                       className="text-dark mb-3 block text-sm dark:text-white"
                     >
-                      {" "}
-                      Your Password{" "}
+                      Your Password
                     </label>
                     <input
                       type="password"
+                      id="password"
                       name="password"
+                      value={formData.password}
+                      onChange={(e) =>
+                        setFormData({ ...formData, password: e.target.value })
+                      }
                       placeholder="Enter your Password"
+                      required
+                      minLength={6}
                       className="border-stroke dark:text-body-color-dark dark:shadow-two text-body-color focus:border-primary dark:focus:border-primary w-full rounded-xs border bg-[#f8f8f8] px-6 py-3 text-base outline-hidden transition-all duration-300 dark:border-transparent dark:bg-[#2C303B] dark:focus:shadow-none"
                     />
                   </div>
@@ -136,6 +252,7 @@ const SignupPage = () => {
                           type="checkbox"
                           id="checkboxLabel"
                           className="sr-only"
+                          required
                         />
                         <div className="box border-body-color/20 mt-1 mr-4 flex h-5 w-5 items-center justify-center rounded-sm border dark:border-white/10">
                           <span className="opacity-0">
@@ -171,8 +288,12 @@ const SignupPage = () => {
                     </label>
                   </div>
                   <div className="mb-6">
-                    <button className="shadow-submit dark:shadow-submit-dark bg-primary hover:bg-primary/90 flex w-full items-center justify-center rounded-xs px-9 py-4 text-base font-medium text-white duration-300">
-                      Sign up
+                    <button
+                      type="submit"
+                      disabled={loading}
+                      className="shadow-submit dark:shadow-submit-dark bg-primary hover:bg-primary/90 flex w-full items-center justify-center rounded-xs px-9 py-4 text-base font-medium text-white duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      {loading ? "Signing up..." : "Sign up"}
                     </button>
                   </div>
                 </form>

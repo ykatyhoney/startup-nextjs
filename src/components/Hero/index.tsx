@@ -5,33 +5,62 @@ const Hero = () => {
     <>
       <section
         id="home"
-        className="relative z-10 overflow-hidden bg-white pb-16 pt-[120px] dark:bg-gray-dark md:pb-[120px] md:pt-[150px] xl:pb-[160px] xl:pt-[180px] 2xl:pb-[200px] 2xl:pt-[210px]"
+        className="relative z-10 overflow-hidden bg-white pb-20 pt-[120px] dark:bg-gray-dark md:pb-24 md:pt-[150px] xl:pb-32 xl:pt-[180px] 2xl:pb-40 2xl:pt-[210px]"
       >
         <div className="container">
           <div className="-mx-4 flex flex-wrap">
             <div className="w-full px-4">
-              <div className="mx-auto max-w-[800px] text-center">
-                <h1 className="mb-5 text-3xl font-bold leading-tight text-black dark:text-white sm:text-4xl sm:leading-tight md:text-5xl md:leading-tight">
-                  Free and Open-Source Next.js Template for Startup & SaaS
+              <div className="mx-auto max-w-[900px] text-center">
+                <h1 className="mb-8 text-4xl font-bold leading-tight text-black dark:text-white sm:text-5xl sm:leading-tight md:text-6xl md:leading-tight lg:text-7xl">
+                  Make Your<br />
+                  <span className="bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
+                    Business AI-First
+                  </span>
                 </h1>
-                <p className="mb-12 text-base leading-relaxed! text-body-color dark:text-body-color-dark sm:text-lg md:text-xl">
-                  Startup is free Next.js template for startups and SaaS
-                  business websites comes with all the essential pages,
-                  components, and sections you need to launch a complete
-                  business website, built-with Next 13.x and Tailwind CSS.
-                </p>
+                
+                {/* Three Key Benefits */}
+                <div className="mb-12 grid grid-cols-1 gap-6 sm:grid-cols-3 sm:gap-8">
+                  <div className="group rounded-lg border border-gray-200 bg-white p-6 shadow-sm transition-all hover:border-primary hover:shadow-lg dark:border-gray-700 dark:bg-gray-800">
+                    <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 text-primary transition-all group-hover:bg-primary group-hover:text-white">
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM13 17H11V15H13V17ZM13 13H11V7H13V13Z" fill="currentColor"/>
+                      </svg>
+                    </div>
+                    <h3 className="mb-2 text-lg font-semibold text-black dark:text-white">Reduce Costs</h3>
+                    <p className="text-sm text-body-color dark:text-body-color-dark">Cut operational expenses with AI automation</p>
+                  </div>
+                  <div className="group rounded-lg border border-gray-200 bg-white p-6 shadow-sm transition-all hover:border-primary hover:shadow-lg dark:border-gray-700 dark:bg-gray-800">
+                    <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 text-primary transition-all group-hover:bg-primary group-hover:text-white">
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M13 3L4 14H12V21L21 10H13V3Z" fill="currentColor"/>
+                      </svg>
+                    </div>
+                    <h3 className="mb-2 text-lg font-semibold text-black dark:text-white">Increase Efficiency</h3>
+                    <p className="text-sm text-body-color dark:text-body-color-dark">Streamline processes and boost productivity</p>
+                  </div>
+                  <div className="group rounded-lg border border-gray-200 bg-white p-6 shadow-sm transition-all hover:border-primary hover:shadow-lg dark:border-gray-700 dark:bg-gray-800">
+                    <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 text-primary transition-all group-hover:bg-primary group-hover:text-white">
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM16.64 8.8C16.49 10.38 15.84 11.9 14.96 13.09L13.5 11.63C13.67 10.66 13.67 9.69 13.5 8.72L16.64 8.8ZM14.34 4.26C15.22 5.45 15.87 6.97 16.02 8.55L12.78 8.47C12.61 7.5 12.61 6.53 12.78 5.56L14.34 4.26ZM10.5 4.26C11.38 5.45 12.03 6.97 12.18 8.55L8.94 8.47C8.77 7.5 8.77 6.53 8.94 5.56L10.5 4.26ZM7.36 8.8C7.51 10.38 8.16 11.9 9.04 13.09L10.5 11.63C10.33 10.66 10.33 9.69 10.5 8.72L7.36 8.8ZM7.66 19.74C6.78 18.55 6.13 17.03 5.98 15.45L9.22 15.53C9.39 16.5 9.39 17.47 9.22 18.44L7.66 19.74ZM9.96 19.74C9.08 18.55 8.43 17.03 8.28 15.45L11.52 15.53C11.69 16.5 11.69 17.47 11.52 18.44L9.96 19.74ZM13.5 19.74C12.62 18.55 11.97 17.03 11.82 15.45L15.06 15.53C15.23 16.5 15.23 17.47 15.06 18.44L13.5 19.74Z" fill="currentColor"/>
+                      </svg>
+                    </div>
+                    <h3 className="mb-2 text-lg font-semibold text-black dark:text-white">Automate Workflows</h3>
+                    <p className="text-sm text-body-color dark:text-body-color-dark">Eliminate manual tasks and repetitive work</p>
+                  </div>
+                </div>
+
                 <div className="flex flex-col items-center justify-center space-y-4 sm:flex-row sm:space-x-4 sm:space-y-0">
                   <Link
-                    href="https://nextjstemplates.com/templates/saas-starter-startup"
-                    className="rounded-xs bg-primary px-8 py-4 text-base font-semibold text-white duration-300 ease-in-out hover:bg-primary/80"
+                    href="#contact"
+                    className="rounded-lg bg-primary px-8 py-4 text-base font-semibold text-white shadow-lg shadow-primary/30 duration-300 ease-in-out hover:bg-primary/90 hover:shadow-xl hover:shadow-primary/40"
                   >
-                    🔥 Get Pro
+                    Book Call
                   </Link>
                   <Link
-                    href="https://github.com/NextJSTemplates/startup-nextjs"
-                    className="inline-block rounded-xs bg-black px-8 py-4 text-base font-semibold text-white duration-300 ease-in-out hover:bg-black/90 dark:bg-white/10 dark:text-white dark:hover:bg-white/5"
+                    href="#services"
+                    className="inline-block rounded-lg border-2 border-primary px-8 py-4 text-base font-semibold text-primary duration-300 ease-in-out hover:bg-primary hover:text-white hover:shadow-lg hover:shadow-primary/30 dark:border-primary dark:text-white dark:hover:bg-primary"
                   >
-                    Star on GitHub
+                    Learn More
                   </Link>
                 </div>
               </div>
